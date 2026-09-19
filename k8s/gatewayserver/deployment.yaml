@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gatewayserver
+  namespace: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gatewayserver
+  template:
+    metadata:
+      labels:
+        app: gatewayserver
+    spec:
+      containers:
+        - name: gatewayserver
+          image: eazybank/gatewayserver:1.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8072
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8072
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8072
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          env:
+            - name: CONFIG_SERVER_HOST
+              value: configserver
+            - name: EUREKA_SERVER_HOST
+              value: eurekaserver
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+            - name: KEYCLOAK_HOST
+              value: keycloak
+            - name: KEYCLOAK_PORT
+              value: "8080"

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message
+  namespace: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message
+  template:
+    metadata:
+      labels:
+        app: message
+    spec:
+      containers:
+        - name: message
+          image: eazybank/message:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9010
+          env:
+            - name: CONFIG_SERVER_HOST
+              value: configserver
+            - name: EUREKA_SERVER_HOST
+              value: eurekaserver
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092

@@ -1,0 +1,27 @@
+# Secrets - never commit
+token.txt
+
+# Build outputs
+target/
+
+# Runtime logs
+logs/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven wrapper jar (use -DskipTests style local builds instead)
+!.mvn/wrapper/maven-wrapper.jar
+
+# Sample/etc
+HELP.md

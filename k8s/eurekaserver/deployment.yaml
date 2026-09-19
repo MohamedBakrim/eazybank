@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: eurekaserver
+  namespace: eazybank
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: eurekaserver
+
+  template:
+    metadata:
+      labels:
+        app: eurekaserver
+
+    spec:
+      containers:
+        - name: eurekaserver
+          image: eazybank/eurekaserver:1.0
+
+          ports:
+            - containerPort: 8070
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8070
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8070
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          env:
+            - name: CONFIG_SERVER_HOST
+              value: "configserver"

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loans
+  namespace: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loans
+  template:
+    metadata:
+      labels:
+        app: loans
+    spec:
+      containers:
+        - name: loans
+          image: eazybank/loans:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8090
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8090
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8090
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          env:
+            - name: CONFIG_SERVER_HOST
+              value: configserver
+            - name: EUREKA_SERVER_HOST
+              value: eurekaserver
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
