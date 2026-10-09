@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: Build (Java 21)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      # The repo has no root aggregator pom; every module has its own Maven wrapper.
+      # The shared BOM + `common` library must be installed first (same as build.ps1).
+      - name: Build shared BOM (installs common library)
+        run: ./eazy-bom/mvnw -B -f eazy-bom/pom.xml clean install -DskipTests
+
+      - name: Compile microservices
+        run: |
+          set -e
+          for m in configserver eurekaserver gatewayserver accounts cards loans message; do
+            echo "::group::Compile $m"
+            "./$m/mvnw" -B -q -f "$m/pom.xml" -DskipTests compile
+            echo "::endgroup::"
+          done
