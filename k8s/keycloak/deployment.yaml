@@ -19,9 +19,15 @@ spec:
           args: ["start-dev"]
           env:
             - name: KC_BOOTSTRAP_ADMIN_USERNAME
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: username
             - name: KC_BOOTSTRAP_ADMIN_PASSWORD
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: password
             - name: KC_HEALTH_ENABLED
               value: "true"
             - name: JAVA_OPTS_APPEND

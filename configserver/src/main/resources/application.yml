@@ -13,7 +13,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        # Only health/info are exposed by default; set MANAGEMENT_ENDPOINTS_EXPOSE=* to open up
+        include: ${MANAGEMENT_ENDPOINTS_EXPOSE:health,info}
   health:
     readiness-state:
       enabled: true
@@ -27,8 +28,10 @@ management:
     tags:
       application: ${spring.application.name}
 
+# Symmetric key used by the config server to encrypt/decrypt config values.
+# Never commit a real key - provide CONFIG_ENCRYPT_KEY via environment/K8s Secret.
 encrypt:
-  key: "45D81EC1EF61DF9AD8D3E5BB397F9"
+  key: ${CONFIG_ENCRYPT_KEY:changeme}
 
 server:
   port: 8071

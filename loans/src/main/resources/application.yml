@@ -8,8 +8,9 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
-    username: sa
-    password: ''
+    # Demo credentials for the in-memory H2 database - override via env in real deployments
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:changeme}
   h2:
     console:
       enabled: true
@@ -25,15 +26,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        # Only health/info are exposed by default; set MANAGEMENT_ENDPOINTS_EXPOSE=* to open up
+        include: ${MANAGEMENT_ENDPOINTS_EXPOSE:health,info}
   health:
     readiness-state:
       enabled: true
     liveness-state:
       enabled: true
   endpoint:
-    shutdown:
-      access: unrestricted
     health:
       probes:
         enabled: true

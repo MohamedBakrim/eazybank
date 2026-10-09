@@ -37,3 +37,8 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "native"
+            - name: CONFIG_ENCRYPT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: configserver-encrypt
+                  key: encrypt-key

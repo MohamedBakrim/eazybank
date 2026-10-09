@@ -49,3 +49,7 @@ spec:
 
             - name: EUREKA_SERVER_HOST
               value: "eurekaserver"
+
+            # Read by the Spring Cloud Stream Kafka binder (producer + consumer)
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092

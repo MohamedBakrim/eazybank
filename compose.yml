@@ -46,6 +46,8 @@ services:
     environment:
       CONFIG_SERVER_HOST: configserver
       EUREKA_SERVER_HOST: eurekaserver
+      # Read by the Spring Cloud Stream Kafka binder (producer + consumer)
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
       configserver:
         condition: service_healthy
@@ -114,6 +116,8 @@ services:
     environment:
       CONFIG_SERVER_HOST: configserver
       EUREKA_SERVER_HOST: eurekaserver
+      # Read by the Spring Cloud Stream Kafka binder (consumer)
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
       configserver:
         condition: service_healthy

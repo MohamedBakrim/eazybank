@@ -40,8 +40,6 @@ spec:
               value: configserver
             - name: EUREKA_SERVER_HOST
               value: eurekaserver
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: kafka:9092
             - name: KEYCLOAK_HOST
               value: keycloak
             - name: KEYCLOAK_PORT
